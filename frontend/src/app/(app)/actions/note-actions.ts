@@ -71,6 +71,9 @@ export async function getLinksAction(noteId: string): Promise<{
     supabase.from('note_links').select('source_note_id').eq('target_note_id', noteId),
   ])
 
+  if (outgoingResult.error) throw outgoingResult.error
+  if (backlinksResult.error) throw backlinksResult.error
+
   const outgoingIds = (outgoingResult.data ?? [])
     .map((l: { target_note_id: string }) => l.target_note_id)
     .filter(Boolean)
@@ -86,6 +89,9 @@ export async function getLinksAction(noteId: string): Promise<{
       ? supabase.from('notes').select('id, title').in('id', backlinkIds)
       : Promise.resolve({ data: [] as Array<{ id: string; title: string }> }),
   ])
+
+  if ('error' in outgoingNotes && outgoingNotes.error) throw outgoingNotes.error
+  if ('error' in backlinkNotes && backlinkNotes.error) throw backlinkNotes.error
 
   return {
     outgoing: outgoingNotes.data ?? [],
@@ -112,6 +118,8 @@ export async function getGraphDataAction(): Promise<{
     supabase.from('notes').select('id, title'),
     supabase.from('note_links').select('source_note_id, target_note_id'),
   ])
+  if (notesResult.error) throw notesResult.error
+  if (linksResult.error) throw linksResult.error
   return {
     nodes: (notesResult.data ?? []).map((n: { id: string; title: string }) => ({
       id: n.id,
@@ -138,13 +146,15 @@ async function _syncLinks(
     const { data } = await supabase.from('notes').select('id').in('title', titles)
     targetIds = (data ?? []).map((n: { id: string }) => n.id)
   }
-  await supabase.from('note_links').delete().eq('source_note_id', noteId)
+  const { error: deleteError } = await supabase.from('note_links').delete().eq('source_note_id', noteId)
+  if (deleteError) throw deleteError
   if (targetIds.length > 0) {
-    await supabase.from('note_links').insert(
+    const { error: insertError } = await supabase.from('note_links').insert(
       targetIds.map((targetId) => ({
         source_note_id: noteId,
         target_note_id: targetId,
       }))
     )
+    if (insertError) throw insertError
   }
 }
