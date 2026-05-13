@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+import { createWikiLinkExtension } from './WikiLinkExtension'
 import type { Note } from '@/types/note'
 import {
   getNoteAction,
@@ -25,8 +26,13 @@ export function NoteEditor({ noteId, allNotes, onSaved, onDeleted }: NoteEditorP
   const [saving, setSaving] = useState(false)
   const isNew = noteId === 'new'
 
+  const allNotesRef = useRef(allNotes)
+  useEffect(() => {
+    allNotesRef.current = allNotes
+  }, [allNotes])
+
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [StarterKit, createWikiLinkExtension(allNotesRef)],
     content: '',
     editorProps: {
       attributes: {
