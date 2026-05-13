@@ -28,5 +28,5 @@ export async function getTagsForNote(noteId: string): Promise<Tag[]> {
     .select('tags(*)')
     .eq('note_id', noteId);
   if (error) throw error;
-  return (data ?? []).map((row: { tags: Tag }) => row.tags);
+  return (data ?? []).map((row) => (row as unknown as { tags: Tag }).tags);
 }
