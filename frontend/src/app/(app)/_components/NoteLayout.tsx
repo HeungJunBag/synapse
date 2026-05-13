@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { signOut } from '@/app/(auth)/login/actions'
 import type { Note } from '@/types/note'
 import { NoteList } from './NoteList'
+import { NoteEditor } from './NoteEditor'
 
 type Tab = 'notes' | 'graph'
 
@@ -72,10 +73,12 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
             onSelect={selectNote}
             onNew={newNote}
           />
-          {/* NoteEditor는 Task 4에서 추가 */}
-          <div className="flex-1 flex items-center justify-center text-slate-400 text-sm">
-            {noteId ? `노트 로딩 중... (${noteId})` : '노트를 선택하거나 새 노트를 만드세요'}
-          </div>
+          <NoteEditor
+            noteId={noteId}
+            allNotes={notes}
+            onSaved={(id) => router.push(`/?noteId=${id}`)}
+            onDeleted={() => router.push('/')}
+          />
         </div>
       ) : (
         /* GraphView는 Task 7에서 추가 */
