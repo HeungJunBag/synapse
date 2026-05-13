@@ -6,6 +6,7 @@ import { signOut } from '@/app/(auth)/login/actions'
 import type { Note } from '@/types/note'
 import { NoteList } from './NoteList'
 import { NoteEditor } from './NoteEditor'
+import { GraphView } from './GraphView'
 
 type Tab = 'notes' | 'graph'
 
@@ -81,10 +82,7 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
           />
         </div>
       ) : (
-        /* GraphView는 Task 7에서 추가 */
-        <div className="flex-1 flex items-center justify-center bg-slate-900 text-slate-500 text-sm">
-          그래프 뷰 (구현 예정)
-        </div>
+        <GraphView onNodeClick={(id) => { setTab('notes'); selectNote(id) }} />
       )}
     </div>
   )
