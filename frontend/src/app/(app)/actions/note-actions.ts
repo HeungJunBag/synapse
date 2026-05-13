@@ -84,14 +84,14 @@ export async function getLinksAction(noteId: string): Promise<{
   const [outgoingNotes, backlinkNotes] = await Promise.all([
     outgoingIds.length > 0
       ? supabase.from('notes').select('id, title').in('id', outgoingIds)
-      : Promise.resolve({ data: [] as Array<{ id: string; title: string }> }),
+      : Promise.resolve({ data: [] as Array<{ id: string; title: string }>, error: null }),
     backlinkIds.length > 0
       ? supabase.from('notes').select('id, title').in('id', backlinkIds)
-      : Promise.resolve({ data: [] as Array<{ id: string; title: string }> }),
+      : Promise.resolve({ data: [] as Array<{ id: string; title: string }>, error: null }),
   ])
 
-  if ('error' in outgoingNotes && outgoingNotes.error) throw outgoingNotes.error
-  if ('error' in backlinkNotes && backlinkNotes.error) throw backlinkNotes.error
+  if (outgoingNotes.error) throw outgoingNotes.error
+  if (backlinkNotes.error) throw backlinkNotes.error
 
   return {
     outgoing: outgoingNotes.data ?? [],
@@ -143,7 +143,8 @@ async function _syncLinks(
   const titles = parseLinkTitles(content)
   let targetIds: string[] = []
   if (titles.length > 0) {
-    const { data } = await supabase.from('notes').select('id').in('title', titles)
+    const { data, error: lookupError } = await supabase.from('notes').select('id').in('title', titles)
+    if (lookupError) throw lookupError
     targetIds = (data ?? []).map((n: { id: string }) => n.id)
   }
   const { error: deleteError } = await supabase.from('note_links').delete().eq('source_note_id', noteId)
