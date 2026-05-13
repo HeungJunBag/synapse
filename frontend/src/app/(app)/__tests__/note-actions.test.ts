@@ -22,9 +22,11 @@ describe('getLinksAction', () => {
         if (table === 'note_links') {
           return {
             select: vi.fn().mockReturnThis(),
-            eq: vi.fn().mockResolvedValue({
-              data: [{ target_note_id: 'note-2' }],
-              error: null,
+            eq: vi.fn((col: string) => {
+              if (col === 'source_note_id') {
+                return Promise.resolve({ data: [{ target_note_id: 'note-2' }], error: null })
+              }
+              return Promise.resolve({ data: [], error: null })
             }),
           }
         }
