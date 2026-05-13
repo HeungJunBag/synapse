@@ -28,9 +28,11 @@ export async function getNoteAction(id: string): Promise<Note> {
 
 export async function createNoteAction(title: string, content: string): Promise<Note> {
   const supabase = await createClient()
+  const { data: userData, error: authError } = await supabase.auth.getUser()
+  if (authError || !userData.user) throw authError ?? new Error('Not authenticated')
   const { data, error } = await supabase
     .from('notes')
-    .insert({ title, content })
+    .insert({ title, content, user_id: userData.user.id })
     .select()
     .single()
   if (error) throw error
