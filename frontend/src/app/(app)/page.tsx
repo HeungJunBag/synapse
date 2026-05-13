@@ -15,6 +15,8 @@ export default async function HomePage({ searchParams }: Props) {
     supabase.auth.getUser(),
   ])
 
+  if (notesResult.error) throw notesResult.error
+
   const notes: Note[] = notesResult.data ?? []
   const userEmail = authResult.data.user?.email ?? ''
 

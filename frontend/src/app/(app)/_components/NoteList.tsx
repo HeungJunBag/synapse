@@ -40,7 +40,7 @@ export function NoteList({ notes, selectedNoteId, onSelect, onNew }: NoteListPro
               {note.title || '제목 없음'}
             </div>
             <div className="text-xs text-slate-400 truncate mt-0.5">
-              {note.content.replace(/<[^>]+>/g, '').slice(0, 40) || '내용 없음'}
+              {(note.content ?? '').replace(/<[^>]+>/g, '').slice(0, 40) || '내용 없음'}
             </div>
           </button>
         ))}
