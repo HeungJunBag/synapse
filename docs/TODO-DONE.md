@@ -2,6 +2,14 @@
 
 ---
 
+## [2026-05-14] middleware.ts → proxy.ts 마이그레이션
+
+- `frontend/src/middleware.ts` 삭제
+- `frontend/src/proxy.ts` 생성 (함수명 `proxy`로 변경)
+- deprecation 경고 제거 확인
+
+---
+
 ## [2026-05-13] 노트 UI 구현
 
 - TipTap 리치 에디터 + `[[링크]]` 자동완성
