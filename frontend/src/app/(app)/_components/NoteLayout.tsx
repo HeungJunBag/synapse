@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { signOut } from '@/app/(auth)/login/actions'
 import type { NoteWithTags, Tag } from '@/types/note'
@@ -48,23 +48,23 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
     return result
   }, [notes, selectedTags, searchQuery])
 
-  function toggleTag(name: string) {
+  const toggleTag = useCallback((name: string) => {
     setSelectedTags((prev) =>
       prev.includes(name) ? prev.filter((t) => t !== name) : [...prev, name]
     )
-  }
+  }, [])
 
-  function clearTags() {
+  const clearTags = useCallback(() => {
     setSelectedTags([])
-  }
+  }, [])
 
-  function selectNote(id: string) {
+  const selectNote = useCallback((id: string) => {
     router.push(`/?noteId=${id}`)
-  }
+  }, [router])
 
-  function newNote() {
+  const newNote = useCallback(() => {
     router.push('/?noteId=new')
-  }
+  }, [router])
 
   return (
     <div className="flex flex-col h-screen">

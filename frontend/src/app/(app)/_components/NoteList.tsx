@@ -64,6 +64,7 @@ export function NoteList({
               <button
                 key={tag.id}
                 onClick={() => onTagToggle(tag.name)}
+                aria-pressed={selectedTags.includes(tag.name)}
                 className={`rounded-full px-2 py-0.5 text-xs transition-colors ${
                   selectedTags.includes(tag.name)
                     ? 'bg-indigo-600 text-white'
