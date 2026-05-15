@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { parseLinkTitles } from '@/lib/note/parse-links'
 import { revalidatePath } from 'next/cache'
-import type { Note, Tag } from '@/types/note'
+import type { Note, Tag, NoteWithTags } from '@/types/note'
 
 export async function getNotesAction(): Promise<Note[]> {
   const supabase = await createClient()
@@ -13,6 +13,24 @@ export async function getNotesAction(): Promise<Note[]> {
     .order('updated_at', { ascending: false })
   if (error) throw error
   return data
+}
+
+export async function getNotesWithTagsAction(): Promise<NoteWithTags[]> {
+  const supabase = await createClient()
+  const { data, error } = await supabase
+    .from('notes')
+    .select('*, note_tags(tags(id, name, user_id, created_at))')
+    .order('updated_at', { ascending: false })
+  if (error) throw error
+  return (data ?? []).map((note) => ({
+    id: note.id,
+    user_id: note.user_id,
+    title: note.title,
+    content: note.content,
+    created_at: note.created_at,
+    updated_at: note.updated_at,
+    tags: ((note.note_tags ?? []) as Array<{ tags: Tag }>).map((nt) => nt.tags),
+  }))
 }
 
 export async function getNoteAction(id: string): Promise<Note> {
