@@ -185,7 +185,7 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
           </div>
 
           {/* 데스크탑 사이드바 */}
-          <div className="hidden md:flex">
+          <div className="hidden md:flex w-64 flex-shrink-0">
             <NoteList {...noteListProps} />
           </div>
 
