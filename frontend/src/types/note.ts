@@ -35,3 +35,7 @@ export interface NoteTag {
   note_id: string;
   tag_id: string;
 }
+
+export interface NoteWithTags extends Note {
+  tags: Tag[]
+}
