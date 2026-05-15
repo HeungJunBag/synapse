@@ -65,6 +65,7 @@ export function NoteList({
                 key={tag.id}
                 onClick={() => onTagToggle(tag.name)}
                 aria-pressed={selectedTags.includes(tag.name)}
+                aria-label={`태그 ${tag.name} 필터`}
                 className={`rounded-full px-2 py-0.5 text-xs transition-colors ${
                   selectedTags.includes(tag.name)
                     ? 'bg-indigo-600 text-white'
