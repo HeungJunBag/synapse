@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { signOut } from '@/app/(auth)/login/actions'
-import type { Note } from '@/types/note'
+import type { NoteWithTags, Tag } from '@/types/note'
 import { NoteList } from './NoteList'
 import { NoteEditor } from './NoteEditor'
 import { GraphView } from './GraphView'
@@ -11,7 +11,7 @@ import { GraphView } from './GraphView'
 type Tab = 'notes' | 'graph'
 
 interface NoteLayoutProps {
-  notes: Note[]
+  notes: NoteWithTags[]
   noteId: string | null
   userEmail: string
 }
@@ -20,15 +20,43 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
   const router = useRouter()
   const [tab, setTab] = useState<Tab>('notes')
   const [searchQuery, setSearchQuery] = useState('')
+  const [selectedTags, setSelectedTags] = useState<string[]>([])
+
+  const allTags = useMemo(
+    () =>
+      Array.from(
+        new Map(notes.flatMap((n) => n.tags).map((t) => [t.name, t])).values()
+      ),
+    [notes]
+  )
 
   const filteredNotes = useMemo(() => {
-    if (!searchQuery) return notes
-    const q = searchQuery.toLowerCase()
-    return notes.filter(note =>
-      note.title.toLowerCase().includes(q) ||
-      note.content.replace(/<[^>]+>/g, '').toLowerCase().includes(q)
+    let result = notes
+    if (selectedTags.length > 0) {
+      result = result.filter((note) =>
+        selectedTags.every((tag) => note.tags.some((t) => t.name === tag))
+      )
+    }
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase()
+      result = result.filter(
+        (note) =>
+          note.title.toLowerCase().includes(q) ||
+          note.content.replace(/<[^>]+>/g, '').toLowerCase().includes(q)
+      )
+    }
+    return result
+  }, [notes, selectedTags, searchQuery])
+
+  function toggleTag(name: string) {
+    setSelectedTags((prev) =>
+      prev.includes(name) ? prev.filter((t) => t !== name) : [...prev, name]
     )
-  }, [notes, searchQuery])
+  }
+
+  function clearTags() {
+    setSelectedTags([])
+  }
 
   function selectNote(id: string) {
     router.push(`/?noteId=${id}`)
@@ -85,6 +113,10 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
             onNew={newNote}
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
+            allTags={allTags}
+            selectedTags={selectedTags}
+            onTagToggle={toggleTag}
+            onClearTags={clearTags}
           />
           <NoteEditor
             noteId={noteId}

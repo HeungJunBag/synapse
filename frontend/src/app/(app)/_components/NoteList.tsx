@@ -1,17 +1,32 @@
 'use client'
 
-import type { Note } from '@/types/note'
+import type { NoteWithTags, Tag } from '@/types/note'
 
 interface NoteListProps {
-  notes: Note[]
+  notes: NoteWithTags[]
   selectedNoteId: string | null
   onSelect: (id: string) => void
   onNew: () => void
   searchQuery: string
   onSearchChange: (q: string) => void
+  allTags: Tag[]
+  selectedTags: string[]
+  onTagToggle: (name: string) => void
+  onClearTags: () => void
 }
 
-export function NoteList({ notes, selectedNoteId, onSelect, onNew, searchQuery, onSearchChange }: NoteListProps) {
+export function NoteList({
+  notes,
+  selectedNoteId,
+  onSelect,
+  onNew,
+  searchQuery,
+  onSearchChange,
+  allTags,
+  selectedTags,
+  onTagToggle,
+  onClearTags,
+}: NoteListProps) {
   return (
     <aside className="w-60 flex-shrink-0 flex flex-col border-r border-slate-200 bg-slate-50">
       <div className="p-3 border-b border-slate-200 space-y-2">
@@ -22,7 +37,9 @@ export function NoteList({ notes, selectedNoteId, onSelect, onNew, searchQuery, 
           + 새 노트
         </button>
         <div className="relative">
-          <label htmlFor="note-search" className="sr-only">노트 검색</label>
+          <label htmlFor="note-search" className="sr-only">
+            노트 검색
+          </label>
           <input
             id="note-search"
             type="search"
@@ -41,11 +58,38 @@ export function NoteList({ notes, selectedNoteId, onSelect, onNew, searchQuery, 
             </button>
           )}
         </div>
+        {allTags.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {allTags.map((tag) => (
+              <button
+                key={tag.id}
+                onClick={() => onTagToggle(tag.name)}
+                className={`rounded-full px-2 py-0.5 text-xs transition-colors ${
+                  selectedTags.includes(tag.name)
+                    ? 'bg-indigo-600 text-white'
+                    : 'border border-indigo-200 text-indigo-600 bg-white hover:bg-indigo-50'
+                }`}
+              >
+                #{tag.name}
+              </button>
+            ))}
+            {selectedTags.length > 0 && (
+              <button
+                onClick={onClearTags}
+                className="text-xs text-slate-400 hover:text-slate-600 underline"
+              >
+                초기화
+              </button>
+            )}
+          </div>
+        )}
       </div>
       <div className="flex-1 overflow-y-auto p-2 space-y-1">
         {notes.length === 0 && (
           <p className="text-xs text-slate-400 text-center mt-4">
-            {searchQuery ? '검색 결과 없음' : '아직 노트가 없습니다'}
+            {searchQuery || selectedTags.length > 0
+              ? '검색 결과 없음'
+              : '아직 노트가 없습니다'}
           </p>
         )}
         {notes.map((note) => (
