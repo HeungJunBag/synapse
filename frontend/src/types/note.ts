@@ -37,5 +37,5 @@ export interface NoteTag {
 }
 
 export interface NoteWithTags extends Note {
-  tags: Tag[]
+  tags: Tag[];
 }

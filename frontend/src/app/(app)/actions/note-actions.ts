@@ -19,7 +19,7 @@ export async function getNotesWithTagsAction(): Promise<NoteWithTags[]> {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('notes')
-    .select('*, note_tags(tags(id, name, user_id, created_at))')
+    .select('*, note_tags(tags(*))')
     .order('updated_at', { ascending: false })
   if (error) throw error
   return (data ?? []).map((note) => ({
@@ -29,7 +29,9 @@ export async function getNotesWithTagsAction(): Promise<NoteWithTags[]> {
     content: note.content,
     created_at: note.created_at,
     updated_at: note.updated_at,
-    tags: ((note.note_tags ?? []) as Array<{ tags: Tag }>).map((nt) => nt.tags),
+    tags: ((note.note_tags ?? []) as Array<{ tags: Tag | null }>)
+      .map((nt) => nt.tags)
+      .filter((t): t is Tag => t !== null),
   }))
 }
 
@@ -126,7 +128,9 @@ export async function getTagsAction(noteId: string): Promise<Tag[]> {
     .select('tags(*)')
     .eq('note_id', noteId)
   if (error) throw error
-  return (data ?? []).map((row: unknown) => (row as { tags: Tag }).tags)
+  return (data ?? [])
+    .map((row: unknown) => (row as { tags: Tag | null }).tags)
+    .filter((t): t is Tag => t !== null)
 }
 
 export async function getGraphDataAction(): Promise<{
