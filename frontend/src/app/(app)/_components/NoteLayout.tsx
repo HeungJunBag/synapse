@@ -21,6 +21,7 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
   const [tab, setTab] = useState<Tab>('notes')
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   const allTags = useMemo(
     () =>
@@ -58,66 +59,136 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
     setSelectedTags([])
   }, [])
 
-  const selectNote = useCallback((id: string) => {
-    router.push(`/?noteId=${id}`)
-  }, [router])
+  const selectNote = useCallback(
+    (id: string) => {
+      setDrawerOpen(false)
+      router.push(`/?noteId=${id}`)
+    },
+    [router]
+  )
 
   const newNote = useCallback(() => {
+    setDrawerOpen(false)
     router.push('/?noteId=new')
   }, [router])
 
+  const noteListProps = {
+    notes: filteredNotes,
+    selectedNoteId: noteId,
+    onSelect: selectNote,
+    onNew: newNote,
+    searchQuery,
+    onSearchChange: setSearchQuery,
+    allTags,
+    selectedTags,
+    onTagToggle: toggleTag,
+    onClearTags: clearTags,
+  }
+
   return (
     <div className="flex flex-col h-screen">
-      {/* 상단 네비게이션 */}
-      <header className="flex items-center justify-between px-4 py-2 bg-slate-800 text-white flex-shrink-0">
-        <span className="font-bold text-sm">시냅스</span>
-        <nav className="flex gap-4">
+      {/* ─── 헤더 ─── */}
+      <header className="flex-shrink-0 bg-slate-800 text-white">
+        {/* 1행: 햄버거(모바일) | 시냅스 | 이메일+로그아웃 */}
+        <div className="flex items-center justify-between px-4 py-2">
+          {/* 햄버거 버튼 — 모바일만 */}
+          <button
+            className="md:hidden text-slate-300 hover:text-white text-xl leading-none"
+            onClick={() => setDrawerOpen(true)}
+            aria-label="메뉴 열기"
+          >
+            ☰
+          </button>
+
+          {/* 로고 */}
+          <span className="font-bold text-sm">시냅스</span>
+
+          {/* 데스크탑 탭 — md 이상에서만 표시 */}
+          <nav className="hidden md:flex gap-4">
+            <button
+              onClick={() => setTab('notes')}
+              className={`text-sm pb-0.5 ${
+                tab === 'notes'
+                  ? 'text-blue-400 border-b-2 border-blue-400'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              📝 노트
+            </button>
+            <button
+              onClick={() => setTab('graph')}
+              className={`text-sm pb-0.5 ${
+                tab === 'graph'
+                  ? 'text-blue-400 border-b-2 border-blue-400'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              🕸 그래프
+            </button>
+          </nav>
+
+          {/* 이메일 + 로그아웃 */}
+          <div className="flex items-center gap-3 text-xs text-slate-400">
+            <span className="hidden md:block">{userEmail}</span>
+            <form action={signOut}>
+              <button type="submit" className="underline hover:text-white">
+                로그아웃
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* 2행: 모바일 탭바 — md 미만에서만 표시 */}
+        <div className="md:hidden flex border-t border-slate-700">
           <button
             onClick={() => setTab('notes')}
-            className={`text-sm pb-0.5 ${
+            className={`flex-1 py-2 text-sm ${
               tab === 'notes'
                 ? 'text-blue-400 border-b-2 border-blue-400'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-400'
             }`}
           >
             📝 노트
           </button>
           <button
             onClick={() => setTab('graph')}
-            className={`text-sm pb-0.5 ${
+            className={`flex-1 py-2 text-sm ${
               tab === 'graph'
                 ? 'text-blue-400 border-b-2 border-blue-400'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-400'
             }`}
           >
             🕸 그래프
           </button>
-        </nav>
-        <div className="flex items-center gap-3 text-xs text-slate-400">
-          <span>{userEmail}</span>
-          <form action={signOut}>
-            <button type="submit" className="underline hover:text-white">
-              로그아웃
-            </button>
-          </form>
         </div>
       </header>
 
-      {/* 탭 콘텐츠 */}
+      {/* ─── 탭 콘텐츠 ─── */}
       {tab === 'notes' ? (
-        <div className="flex flex-1 overflow-hidden">
-          <NoteList
-            notes={filteredNotes}
-            selectedNoteId={noteId}
-            onSelect={selectNote}
-            onNew={newNote}
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            allTags={allTags}
-            selectedTags={selectedTags}
-            onTagToggle={toggleTag}
-            onClearTags={clearTags}
-          />
+        <div className="flex flex-1 overflow-hidden relative">
+          {/* 백드롭 — 모바일, drawerOpen일 때만 */}
+          {drawerOpen && (
+            <button
+              className="fixed inset-0 bg-black/40 z-30 md:hidden"
+              onClick={() => setDrawerOpen(false)}
+              aria-label="메뉴 닫기"
+            />
+          )}
+
+          {/* 모바일 슬라이드 드로어 */}
+          <div
+            className={`fixed inset-y-0 left-0 z-40 w-64 transition-transform duration-200 md:hidden ${
+              drawerOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
+          >
+            <NoteList {...noteListProps} />
+          </div>
+
+          {/* 데스크탑 사이드바 */}
+          <div className="hidden md:flex">
+            <NoteList {...noteListProps} />
+          </div>
+
           <NoteEditor
             noteId={noteId}
             allNotes={notes}
