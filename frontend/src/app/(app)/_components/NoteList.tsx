@@ -7,23 +7,45 @@ interface NoteListProps {
   selectedNoteId: string | null
   onSelect: (id: string) => void
   onNew: () => void
+  searchQuery: string
+  onSearchChange: (q: string) => void
 }
 
-export function NoteList({ notes, selectedNoteId, onSelect, onNew }: NoteListProps) {
+export function NoteList({ notes, selectedNoteId, onSelect, onNew, searchQuery, onSearchChange }: NoteListProps) {
   return (
     <aside className="w-60 flex-shrink-0 flex flex-col border-r border-slate-200 bg-slate-50">
-      <div className="p-3 border-b border-slate-200">
+      <div className="p-3 border-b border-slate-200 space-y-2">
         <button
           onClick={onNew}
           className="w-full bg-slate-800 text-white rounded-md py-1.5 text-sm font-medium hover:bg-slate-700"
         >
           + 새 노트
         </button>
+        <div className="relative">
+          <label htmlFor="note-search" className="sr-only">노트 검색</label>
+          <input
+            id="note-search"
+            type="search"
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder="노트 검색..."
+            className="w-full rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-sm pr-7 focus:outline-none focus:ring-1 focus:ring-blue-300"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => onSearchChange('')}
+              aria-label="검색어 지우기"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs"
+            >
+              <span aria-hidden="true">×</span>
+            </button>
+          )}
+        </div>
       </div>
       <div className="flex-1 overflow-y-auto p-2 space-y-1">
         {notes.length === 0 && (
           <p className="text-xs text-slate-400 text-center mt-4">
-            아직 노트가 없습니다
+            {searchQuery ? '검색 결과 없음' : '아직 노트가 없습니다'}
           </p>
         )}
         {notes.map((note) => (
@@ -40,7 +62,7 @@ export function NoteList({ notes, selectedNoteId, onSelect, onNew }: NoteListPro
               {note.title || '제목 없음'}
             </div>
             <div className="text-xs text-slate-400 truncate mt-0.5">
-              {(note.content ?? '').replace(/<[^>]+>/g, '').slice(0, 40) || '내용 없음'}
+              {note.content.replace(/<[^>]+>/g, '').slice(0, 40) || '내용 없음'}
             </div>
           </button>
         ))}

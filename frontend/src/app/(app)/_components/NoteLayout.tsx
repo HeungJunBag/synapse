@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { signOut } from '@/app/(auth)/login/actions'
 import type { Note } from '@/types/note'
@@ -19,6 +19,16 @@ interface NoteLayoutProps {
 export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
   const router = useRouter()
   const [tab, setTab] = useState<Tab>('notes')
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const filteredNotes = useMemo(() => {
+    if (!searchQuery) return notes
+    const q = searchQuery.toLowerCase()
+    return notes.filter(note =>
+      note.title.toLowerCase().includes(q) ||
+      note.content.replace(/<[^>]+>/g, '').toLowerCase().includes(q)
+    )
+  }, [notes, searchQuery])
 
   function selectNote(id: string) {
     router.push(`/?noteId=${id}`)
@@ -69,10 +79,12 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
       {tab === 'notes' ? (
         <div className="flex flex-1 overflow-hidden">
           <NoteList
-            notes={notes}
+            notes={filteredNotes}
             selectedNoteId={noteId}
             onSelect={selectNote}
             onNew={newNote}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
           />
           <NoteEditor
             noteId={noteId}
