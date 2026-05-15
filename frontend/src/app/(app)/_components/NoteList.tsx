@@ -28,7 +28,7 @@ export function NoteList({
   onClearTags,
 }: NoteListProps) {
   return (
-    <aside className="w-60 flex-shrink-0 flex flex-col border-r border-slate-200 bg-slate-50">
+    <aside className="w-full h-full flex flex-col border-r border-slate-200 bg-slate-50">
       <div className="p-3 border-b border-slate-200 space-y-2">
         <button
           onClick={onNew}
