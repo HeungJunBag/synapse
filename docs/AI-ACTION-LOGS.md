@@ -2,6 +2,48 @@
 
 ---
 
+### [2026-05-15] 서브에이전트 구현 — 모바일 반응형 레이아웃
+
+**작업**: 플랜 `docs/superpowers/plans/2026-05-15-mobile-responsive.md` 3개 Task를 서브에이전트 방식으로 실행  
+**결과**: 전체 통과
+
+| Task | 내용 | 결과 |
+|------|------|------|
+| Task 1 | NoteLayout drawerOpen 상태, 2행 헤더, 슬라이드 드로어 | 완료 |
+| Task 2 | NoteList `w-full h-full` + 데스크탑 사이드바 `w-64 flex-shrink-0` | 완료 (품질 리뷰에서 너비 수정 추가) |
+| Task 3 | TypeScript 타입 체크 + 최종 코드 리뷰 | 완료 |
+
+**수정 파일**:
+- `frontend/src/app/(app)/_components/NoteLayout.tsx`
+- `frontend/src/app/(app)/_components/NoteList.tsx`
+
+---
+
+### [2026-05-15] 서브에이전트 구현 — 태그 필터링
+
+**작업**: 플랜 `docs/superpowers/plans/2026-05-15-tag-filter.md` 실행  
+**결과**: 전체 통과
+
+**수정 파일**:
+- `frontend/src/types/note.ts` (`NoteWithTags` 타입 추가)
+- `frontend/src/app/(app)/actions/note-actions.ts` (`getNotesWithTagsAction` 추가)
+- `frontend/src/app/(app)/page.tsx`
+- `frontend/src/app/(app)/_components/NoteLayout.tsx`
+- `frontend/src/app/(app)/_components/NoteList.tsx`
+
+---
+
+### [2026-05-15] 서브에이전트 구현 — 노트 검색
+
+**작업**: 플랜 `docs/superpowers/plans/2026-05-15-note-search.md` 실행  
+**결과**: 전체 통과
+
+**수정 파일**:
+- `frontend/src/app/(app)/_components/NoteLayout.tsx`
+- `frontend/src/app/(app)/_components/NoteList.tsx`
+
+---
+
 ### [2026-05-13] 서브에이전트 구현 — 노트 도메인 스키마 & 데이터 접근 계층
 
 **작업**: 플랜 `docs/superpowers/plans/2026-05-13-note-schema.md` 7개 Task를 서브에이전트 방식으로 실행  
