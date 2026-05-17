@@ -88,7 +88,7 @@ export function NoteEditor({ noteId, allNotes, onSaved, onDeleted }: NoteEditorP
 
   if (!noteId) {
     return (
-      <div className="flex-1 flex items-center justify-center text-slate-400 text-sm">
+      <div className="flex-1 flex items-center justify-center text-slate-500 text-sm">
         노트를 선택하거나 새 노트를 만드세요
       </div>
     )
@@ -102,7 +102,7 @@ export function NoteEditor({ noteId, allNotes, onSaved, onDeleted }: NoteEditorP
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="제목을 입력하세요"
-          className="flex-1 text-lg font-bold outline-none placeholder:text-slate-300"
+          className="flex-1 text-lg font-bold outline-none placeholder:text-slate-400"
         />
         <button
           onClick={handleSave}

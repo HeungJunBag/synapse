@@ -93,7 +93,7 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
         <div className="flex items-center justify-between px-4 py-2">
           {/* 햄버거 버튼 — 모바일만 */}
           <button
-            className="md:hidden text-slate-300 hover:text-white text-xl leading-none"
+            className="md:hidden text-slate-200 hover:text-white text-xl leading-none"
             onClick={() => setDrawerOpen(true)}
             aria-label="메뉴 열기"
           >
@@ -110,7 +110,7 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
               className={`text-sm pb-0.5 ${
                 tab === 'notes'
                   ? 'text-blue-400 border-b-2 border-blue-400'
-                  : 'text-slate-400 hover:text-slate-200'
+                  : 'text-slate-300 hover:text-white'
               }`}
             >
               📝 노트
@@ -120,7 +120,7 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
               className={`text-sm pb-0.5 ${
                 tab === 'graph'
                   ? 'text-blue-400 border-b-2 border-blue-400'
-                  : 'text-slate-400 hover:text-slate-200'
+                  : 'text-slate-300 hover:text-white'
               }`}
             >
               🕸 그래프
@@ -128,7 +128,7 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
           </nav>
 
           {/* 이메일 + 로그아웃 */}
-          <div className="flex items-center gap-3 text-xs text-slate-400">
+          <div className="flex items-center gap-3 text-xs text-slate-300">
             <span className="hidden md:block">{userEmail}</span>
             <form action={signOut}>
               <button type="submit" className="underline hover:text-white">
@@ -145,7 +145,7 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
             className={`flex-1 py-2 text-sm ${
               tab === 'notes'
                 ? 'text-blue-400 border-b-2 border-blue-400'
-                : 'text-slate-400'
+                : 'text-slate-300'
             }`}
           >
             📝 노트
@@ -155,7 +155,7 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
             className={`flex-1 py-2 text-sm ${
               tab === 'graph'
                 ? 'text-blue-400 border-b-2 border-blue-400'
-                : 'text-slate-400'
+                : 'text-slate-300'
             }`}
           >
             🕸 그래프
