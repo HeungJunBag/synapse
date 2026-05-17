@@ -52,7 +52,7 @@ export function NoteList({
             <button
               onClick={() => onSearchChange('')}
               aria-label="검색어 지우기"
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 text-xs"
             >
               <span aria-hidden="true">×</span>
             </button>
@@ -78,7 +78,7 @@ export function NoteList({
             {selectedTags.length > 0 && (
               <button
                 onClick={onClearTags}
-                className="text-xs text-slate-400 hover:text-slate-600 underline"
+                className="text-xs text-slate-500 hover:text-slate-700 underline"
               >
                 초기화
               </button>
@@ -88,7 +88,7 @@ export function NoteList({
       </div>
       <div className="flex-1 overflow-y-auto p-2 space-y-1">
         {notes.length === 0 && (
-          <p className="text-xs text-slate-400 text-center mt-4">
+          <p className="text-xs text-slate-500 text-center mt-4">
             {searchQuery || selectedTags.length > 0
               ? '검색 결과 없음'
               : '아직 노트가 없습니다'}
@@ -107,7 +107,7 @@ export function NoteList({
             <div className="font-medium truncate">
               {note.title || '제목 없음'}
             </div>
-            <div className="text-xs text-slate-400 truncate mt-0.5">
+            <div className="text-xs text-slate-500 truncate mt-0.5">
               {note.content.replace(/<[^>]+>/g, '').slice(0, 40) || '내용 없음'}
             </div>
           </button>
