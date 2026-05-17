@@ -377,11 +377,11 @@ npm test
 
 ---
 
-## 👤 팀원 소개 (Team)
+## 👤 개발자 소개 (Developer)
 
-| 이름 | GitHub | 역할 |
-|------|--------|------|
-| 백흥준 (HeungJunBag) | [@HeungJunBag](https://github.com/HeungJunBag) | 기획 · 설계 · 전체 개발 |
+| GitHub | 역할 |
+|--------|------|
+| [@HeungJunBag](https://github.com/HeungJunBag) | 기획 · 설계 · 전체 개발 |
 
 **기여 범위**
 - 제텔카스텐 방법론 기반 서비스 기획 및 도메인 설계
