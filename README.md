@@ -50,9 +50,9 @@ Notion, Bear, Obsidian 같은 도구들은 정보를 **폴더와 계층 구조**
 | 기능 | 미리보기 |
 |------|----------|
 | 그래프 뷰 | ![graph](https://github.com/user-attachments/assets/d74e0db6-9db5-4d7f-8bde-dfa822db203a) |
-| `[[링크]]` 자동완성 | ![wikilink](docs/assets/demo-wikilink.gif) |
-| 태그 필터링 + 검색 | ![filter](docs/assets/demo-filter.gif) |
-| 모바일 드로어 | ![mobile](docs/assets/demo-mobile.gif) |
+| `[[링크]]` 자동완성 | ![wikilink](https://github.com/user-attachments/assets/5c7b8346-47db-4c23-a1aa-4da4e4c3ff1e) |
+| 태그 필터링 + 검색 | ![filter](https://github.com/user-attachments/assets/5b5cf604-3e50-4dee-93d6-fef766673abd) |
+| 모바일 드로어 | ![mobile](https://github.com/user-attachments/assets/4b52b498-5be8-4e8c-8daf-e1e4831120af) |
 
 ---
 
