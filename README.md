@@ -49,7 +49,7 @@ Notion, Bear, Obsidian 같은 도구들은 정보를 **폴더와 계층 구조**
 
 | 기능 | 미리보기 |
 |------|----------|
-| 그래프 뷰 | ![graph](docs/assets/demo-graph.gif) |
+| 그래프 뷰 | ![graph](https://github.com/user-attachments/assets/d74e0db6-9db5-4d7f-8bde-dfa822db203a) |
 | `[[링크]]` 자동완성 | ![wikilink](docs/assets/demo-wikilink.gif) |
 | 태그 필터링 + 검색 | ![filter](docs/assets/demo-filter.gif) |
 | 모바일 드로어 | ![mobile](docs/assets/demo-mobile.gif) |
