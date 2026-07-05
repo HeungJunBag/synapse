@@ -1,6 +1,6 @@
 'use client'
 
-import type { NoteWithTags, Tag } from '@/types/note'
+import type { NoteWithTags } from '@/types/note'
 
 interface NoteListProps {
   notes: NoteWithTags[]
@@ -9,7 +9,7 @@ interface NoteListProps {
   onNew: () => void
   searchQuery: string
   onSearchChange: (q: string) => void
-  allTags: Tag[]
+  allTags: string[]
   selectedTags: string[]
   onTagToggle: (name: string) => void
   onClearTags: () => void
@@ -62,17 +62,17 @@ export function NoteList({
           <div className="flex flex-wrap gap-1">
             {allTags.map((tag) => (
               <button
-                key={tag.id}
-                onClick={() => onTagToggle(tag.name)}
-                aria-pressed={selectedTags.includes(tag.name)}
-                aria-label={`태그 ${tag.name} 필터`}
+                key={tag}
+                onClick={() => onTagToggle(tag)}
+                aria-pressed={selectedTags.includes(tag)}
+                aria-label={`태그 ${tag} 필터`}
                 className={`rounded-full px-2 py-0.5 text-xs transition-colors ${
-                  selectedTags.includes(tag.name)
+                  selectedTags.includes(tag)
                     ? 'bg-indigo-600 text-white'
                     : 'border border-indigo-200 text-indigo-600 bg-white hover:bg-indigo-50'
                 }`}
               >
-                #{tag.name}
+                #{tag}
               </button>
             ))}
             {selectedTags.length > 0 && (

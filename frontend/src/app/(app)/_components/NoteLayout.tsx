@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { signOut } from '@/app/(auth)/login/actions'
-import type { NoteWithTags, Tag } from '@/types/note'
+import type { NoteWithTags } from '@/types/note'
 import { NoteList } from './NoteList'
 import { NoteEditor } from './NoteEditor'
 import { GraphView } from './GraphView'
@@ -24,10 +24,7 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   const allTags = useMemo(
-    () =>
-      Array.from(
-        new Map(notes.flatMap((n) => n.tags).map((t) => [t.name, t])).values()
-      ),
+    () => Array.from(new Set(notes.flatMap((n) => n.tags))),
     [notes]
   )
 
@@ -35,7 +32,7 @@ export function NoteLayout({ notes, noteId, userEmail }: NoteLayoutProps) {
     let result = notes
     if (selectedTags.length > 0) {
       result = result.filter((note) =>
-        selectedTags.every((tag) => note.tags.some((t) => t.name === tag))
+        selectedTags.every((tag) => note.tags.includes(tag))
       )
     }
     if (searchQuery) {
