@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { createWikiLinkExtension } from './WikiLinkExtension'
-import type { Note } from '@/types/note'
+import type { NoteWithTags } from '@/types/note'
 import {
   getNoteAction,
   createNoteAction,
@@ -15,13 +15,14 @@ import { NoteLinks } from './NoteLinks'
 
 interface NoteEditorProps {
   noteId: string | null
-  allNotes: Note[]
+  allNotes: NoteWithTags[]
   onSaved: (id: string) => void
   onDeleted: () => void
 }
 
 export function NoteEditor({ noteId, allNotes, onSaved, onDeleted }: NoteEditorProps) {
   const [title, setTitle] = useState('')
+  const [tags, setTags] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const isNew = noteId === 'new'
@@ -44,6 +45,7 @@ export function NoteEditor({ noteId, allNotes, onSaved, onDeleted }: NoteEditorP
   useEffect(() => {
     if (!noteId || isNew) {
       setTitle('')
+      setTags([])
       setError(null)
       editor?.commands.setContent('')
       return
@@ -52,6 +54,7 @@ export function NoteEditor({ noteId, allNotes, onSaved, onDeleted }: NoteEditorP
     getNoteAction(noteId)
       .then((note) => {
         setTitle(note.title)
+        setTags(note.tags)
         editor?.commands.setContent(note.content)
       })
       .catch(() => setError('노트를 불러오지 못했습니다.'))
@@ -131,7 +134,7 @@ export function NoteEditor({ noteId, allNotes, onSaved, onDeleted }: NoteEditorP
       </div>
 
       {/* 링크 패널 (Task 6에서 구현) */}
-      {!isNew && noteId && <NoteLinks noteId={noteId} />}
+      {!isNew && noteId && <NoteLinks noteId={noteId} tags={tags} />}
     </div>
   )
 }
