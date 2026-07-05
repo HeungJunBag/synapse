@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { cookies } from 'next/headers'
 import { NoteLayout } from './_components/NoteLayout'
 import { getNotesWithTagsAction } from './actions/note-actions'
 
@@ -9,13 +9,10 @@ interface Props {
 export default async function HomePage({ searchParams }: Props) {
   const { noteId } = await searchParams
 
-  const supabase = await createClient()
-  const [notes, authResult] = await Promise.all([
-    getNotesWithTagsAction(),
-    supabase.auth.getUser(),
-  ])
+  const cookieStore = await cookies()
+  const userEmail = cookieStore.get('user_email')?.value ?? ''
 
-  const userEmail = authResult.data.user?.email ?? ''
+  const notes = await getNotesWithTagsAction()
 
   return (
     <NoteLayout
