@@ -63,5 +63,5 @@ export async function getLinksAction(noteId: string): Promise<LinkData> {
 }
 
 export async function getGraphDataAction(): Promise<GraphData> {
-  return apiClient<GraphData>('/api/graph')
+  return apiClient<GraphData>('/api/notes/graph')
 }

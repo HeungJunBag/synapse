@@ -5,8 +5,8 @@ import java.util.UUID;
 
 public record GraphResponse(
         List<Node> nodes,
-        List<Edge> edges
+        List<Link> links
 ) {
     public record Node(UUID id, String title) {}
-    public record Edge(UUID source, UUID target) {}
+    public record Link(UUID source, UUID target) {}
 }

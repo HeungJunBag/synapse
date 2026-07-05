@@ -127,11 +127,11 @@ public class NoteService {
                 .map(n -> new GraphResponse.Node(n.getId(), n.getTitle()))
                 .toList();
 
-        List<GraphResponse.Edge> edges = noteLinkRepository.findAllByMemberId(memberId).stream()
-                .map(nl -> new GraphResponse.Edge(nl.getSourceNote().getId(), nl.getTargetNote().getId()))
+        List<GraphResponse.Link> links = noteLinkRepository.findAllByMemberId(memberId).stream()
+                .map(nl -> new GraphResponse.Link(nl.getSourceNote().getId(), nl.getTargetNote().getId()))
                 .toList();
 
-        return new GraphResponse(nodes, edges);
+        return new GraphResponse(nodes, links);
     }
 
     // ─── 내부 헬퍼 ──────────────────────────────────────────────────────────────
